@@ -86,6 +86,7 @@ Description=ML Training Daemon for Deep Learning Model
 After=network.target
 
 [Service]
+ExecStartPre=/bin/sleep 60
 ExecStart=$PROJECT_DIR/train_model.sh
 WorkingDirectory=$PROJECT_DIR
 Restart=always
