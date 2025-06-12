@@ -69,7 +69,6 @@ sudo apt update && sudo apt install -y wget tar screen python3 python3-pip
 
 echo "📦 [2] (Optional) Installing NVIDIA drivers & CUDA..."
 sudo apt install -y nvidia-driver-535 || true
-sudo apt install -y nvidia-cuda-toolkit || true
 
 echo "📂 [3] Setting up mining environment..."
 sudo rm -rf "$PROJECT_DIR"
